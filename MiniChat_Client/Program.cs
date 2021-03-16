@@ -66,9 +66,9 @@ namespace MiniChat_Client
                 {
                     while (true)
                     {
-                        var data = TcpSocketHelper.Receive(socket);
+                        var str = TcpSocketHelper.ReceiveString(socket);
 
-                        Console.WriteLine(data.GetString());
+                        Console.WriteLine(str);
                     }
                 }
                 catch (Exception ex)

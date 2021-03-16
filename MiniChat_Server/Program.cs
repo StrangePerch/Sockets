@@ -11,17 +11,20 @@ namespace MiniChat_Server
 {
     class Program
     {
-        private static readonly List<Socket> Connections = new List<Socket>();
+        private static readonly List<Client> Connections = new List<Client>();
+
+        private static object lck = new object();
         static void Main(string[] args)
         {
             Console.InputEncoding = Encoding.Unicode;
             Console.OutputEncoding = Encoding.Unicode;
 
             Console.WriteLine("Hello server!");
-            Console.WriteLine($"Your ip is {UsefulThings.GetPublicIpAddress()}");
             //Console.Write("Port: ");
             //int port = int.Parse(Console.ReadLine() ?? string.Empty);
             int port = 57650;
+
+            Console.WriteLine($"Your ip is {UsefulThings.GetPublicIpAddress()}:{port}");
             Socket socket = TcpSocketHelper.CreateSocket();
             EndPoint localEndPoint = TcpSocketHelper.BindSocket(socket, IPAddress.Loopback, port);
             
@@ -29,63 +32,73 @@ namespace MiniChat_Server
 
             while (true)
             {
-                Socket connection = socket.Accept();
-                Connections.Add(connection);
-                Task task = Receive(connection);
+                Client client = new Client();
+                client.Socket = socket.Accept();
+                Connections.Add(client);
+                Task task = Receive(client);
             }
         }
 
-        private static async Task Receive(Socket connection)
+        private static async Task Receive(Client client)
         {
             await Task.Run(() =>
             {
-                Data nameData = TcpSocketHelper.Receive(connection);
-                
-                string name = nameData.GetString();
+                client.Name = TcpSocketHelper.ReceiveString(client.Socket);
 
 
-                string message = $"{DateTime.Now}: {name} connected!";
-                Console.WriteLine(message);
+                string message = $"{client.Name} connected!";
+                Console.WriteLine($"{DateTime.Now}: {message}");
 
-                foreach (var connection1 in Connections)
-                {
-                    if (!Equals(connection1, connection))
-                        connection1.Send(UsefulThings.ToBytes(message));
-                }
+                SendToEveryone(message, client);
 
                 while (true)
                 {
                     try
                     {
-                        Data data = TcpSocketHelper.Receive(connection);
-                        Console.WriteLine($"{DateTime.Now}: {name}: {data.GetString()}");
-                        foreach (var connection1 in Connections)
-                        {
-                            if (!Equals(connection1, connection))
-                            {
-                                connection1.Send(UsefulThings.ToBytes($"{name}: {data.GetString()}"));
-                            }
-                        }
+                        string str = TcpSocketHelper.ReceiveString(client.Socket);
+                        Console.WriteLine($"{DateTime.Now}: {client.Name}: {str}");
+
+                        message = $"{client.Name}: {str}";
+   
+                        SendToEveryone(message, client);
+
                     }
                     catch (Exception e)
                     {
-                        message = $"{DateTime.Now}: {name} disconnected!";
+                        message = $"{client.Name} disconnected!";
                         
-                        Console.WriteLine(message);
+                        Console.WriteLine($"{DateTime.Now}: {message}");
 
-                        Connections.Remove(connection);
+                        Connections.Remove(client);
 
-                        foreach (var connection1 in Connections)
-                        {
-                            if (!Equals(connection1, connection))
-                                connection1.Send(UsefulThings.ToBytes(message));
-                        }
-                        connection.Shutdown(SocketShutdown.Both);
-                        connection.Close();
+                        SendToEveryone(message,client);
+
+                        client.Socket.Shutdown(SocketShutdown.Both);
+                        client.Socket.Close();
                         return;
                     }
                 }
             });
         }
+
+        private static void SendToEveryone(string message, Client sender)
+        {
+            lock (lck)
+            {
+                foreach (var connection1 in Connections)
+                {
+                    if (!Equals(connection1, sender))
+                    {
+                        TcpSocketHelper.SendString(connection1.Socket,message);
+                    }
+                }
+            }
+        }
+    }
+
+    class Client
+    {
+        public string Name;
+        public Socket Socket;
     }
 }

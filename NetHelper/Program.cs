@@ -78,7 +78,19 @@ namespace NetHelper
 
         public static void SendString(Socket socket, string message)
         {
+            var bytes = Encoding.Unicode.GetBytes(message);
+            socket.Send(BitConverter.GetBytes(bytes.Length));
             socket.Send(Encoding.Unicode.GetBytes(message));
+        }
+
+        public static string ReceiveString(Socket socket)
+        {
+            byte[] buffer = new byte[4];
+            socket.Receive(buffer);
+            int length = BitConverter.ToInt32(buffer);
+            buffer = new byte[length];
+            socket.Receive(buffer);
+            return UsefulThings.ToString(buffer, length);
         }
     }
 
@@ -105,6 +117,13 @@ namespace NetHelper
         public static byte[] ToBytes(string str)
         {
             return Encoding.Unicode.GetBytes(str);
+        }
+
+        public static string ToString(byte[] bytes, int length)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.Append(Encoding.Unicode.GetString(bytes, 0, length));
+            return builder.ToString();
         }
     }
 
