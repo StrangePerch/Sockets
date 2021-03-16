@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using System.Threading.Tasks;
 using NetHelper;
 
@@ -13,6 +14,9 @@ namespace MiniChat_Server
         private static readonly List<Socket> Connections = new List<Socket>();
         static void Main(string[] args)
         {
+            Console.InputEncoding = Encoding.Unicode;
+            Console.OutputEncoding = Encoding.Unicode;
+
             Console.WriteLine("Hello server!");
             Console.WriteLine($"Your ip is {UsefulThings.GetPublicIpAddress()}");
             //Console.Write("Port: ");
@@ -22,14 +26,13 @@ namespace MiniChat_Server
             EndPoint localEndPoint = TcpSocketHelper.BindSocket(socket, IPAddress.Loopback, port);
             
             socket.Listen(10);
-            
+
             while (true)
             {
                 Socket connection = socket.Accept();
                 Connections.Add(connection);
                 Task task = Receive(connection);
             }
-            
         }
 
         private static async Task Receive(Socket connection)
@@ -41,7 +44,7 @@ namespace MiniChat_Server
                 string name = nameData.GetString();
 
 
-                string message = $"{name} connected!";
+                string message = $"{DateTime.Now}: {name} connected!";
                 Console.WriteLine(message);
 
                 foreach (var connection1 in Connections)
@@ -55,7 +58,7 @@ namespace MiniChat_Server
                     try
                     {
                         Data data = TcpSocketHelper.Receive(connection);
-                        Console.WriteLine(data.GetString());
+                        Console.WriteLine($"{DateTime.Now}: {name}: {data.GetString()}");
                         foreach (var connection1 in Connections)
                         {
                             if (!Equals(connection1, connection))
@@ -66,9 +69,11 @@ namespace MiniChat_Server
                     }
                     catch (Exception e)
                     {
-                        message = $"{name} disconnected!";
+                        message = $"{DateTime.Now}: {name} disconnected!";
                         
                         Console.WriteLine(message);
+
+                        Connections.Remove(connection);
 
                         foreach (var connection1 in Connections)
                         {

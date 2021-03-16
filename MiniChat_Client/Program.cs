@@ -16,6 +16,9 @@ namespace MiniChat_Client
         private static string name;
         static void Main(string[] args)
         {
+            Console.InputEncoding = Encoding.Unicode;
+            Console.OutputEncoding = Encoding.Unicode;
+            
             Console.WriteLine("Hello client!");
             Console.WriteLine("Say me you name!");
             Console.Write("Name: ");
@@ -35,7 +38,6 @@ namespace MiniChat_Client
                 socket.Connect(server);
 
                 Task listeningTask = Listen();
-                listeningTask.Start();
 
                 TcpSocketHelper.SendString(socket, name);
 

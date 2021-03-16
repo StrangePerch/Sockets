@@ -5,9 +5,19 @@ VisualStudioVersion = 16.0.31019.35
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniChat_Server", "MiniChat_Server\MiniChat_Server.csproj", "{ED205972-5786-4F39-AD50-AAB3780E14F3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetHelper", "NetHelper\NetHelper.csproj", "{A348D33A-8265-442C-B627-A7658F976141}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NetHelper", "NetHelper\NetHelper.csproj", "{A348D33A-8265-442C-B627-A7658F976141}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniChat_Client", "MiniChat_Client\MiniChat_Client.csproj", "{3BD396E2-6879-41DD-8354-56BD5EE4A8F5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MiniChat_Client", "MiniChat_Client\MiniChat_Client.csproj", "{3BD396E2-6879-41DD-8354-56BD5EE4A8F5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Keyloger_Server", "Keyloger_Server\Keyloger_Server.csproj", "{7B816D15-20F0-4D84-80A9-31ECB9BEC49D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MiniChat", "MiniChat", "{5C3F14DC-8171-45DD-8004-BDB7F904EE68}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{F7948217-BEFA-41BE-BDA6-2BD0925F46A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Keyloger", "Keyloger", "{892FCC2C-026E-4940-9310-B37CB2FE8CF9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Keyloger_Client", "Keyloger_Client\Keyloger_Client.csproj", "{EF6F5DCB-5F23-4159-98F2-41972DE8F3EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,9 +37,24 @@ Global
 		{3BD396E2-6879-41DD-8354-56BD5EE4A8F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3BD396E2-6879-41DD-8354-56BD5EE4A8F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3BD396E2-6879-41DD-8354-56BD5EE4A8F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7B816D15-20F0-4D84-80A9-31ECB9BEC49D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7B816D15-20F0-4D84-80A9-31ECB9BEC49D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7B816D15-20F0-4D84-80A9-31ECB9BEC49D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7B816D15-20F0-4D84-80A9-31ECB9BEC49D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF6F5DCB-5F23-4159-98F2-41972DE8F3EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF6F5DCB-5F23-4159-98F2-41972DE8F3EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF6F5DCB-5F23-4159-98F2-41972DE8F3EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF6F5DCB-5F23-4159-98F2-41972DE8F3EB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{ED205972-5786-4F39-AD50-AAB3780E14F3} = {5C3F14DC-8171-45DD-8004-BDB7F904EE68}
+		{A348D33A-8265-442C-B627-A7658F976141} = {F7948217-BEFA-41BE-BDA6-2BD0925F46A9}
+		{3BD396E2-6879-41DD-8354-56BD5EE4A8F5} = {5C3F14DC-8171-45DD-8004-BDB7F904EE68}
+		{7B816D15-20F0-4D84-80A9-31ECB9BEC49D} = {892FCC2C-026E-4940-9310-B37CB2FE8CF9}
+		{EF6F5DCB-5F23-4159-98F2-41972DE8F3EB} = {892FCC2C-026E-4940-9310-B37CB2FE8CF9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {42B44549-0DC8-489D-AEF7-02EBE54AD2BD}
